@@ -32,7 +32,7 @@ public class ClassificationController {
 
     private final String IMAGE_UPLOAD_DIRECTORY = "src/main/resources/static/images/mushroom_instances";
 
-    private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ClassificationController.class);
 
     public ClassificationController(ClassificationService classificationService, UserService userService, ImageService imageService) {
         this.classificationService = classificationService;
@@ -41,7 +41,8 @@ public class ClassificationController {
     }
 
     @PostMapping("/identify")
-    public ResponseEntity<?> identifyMushroom(@RequestParam("userId") Long userId, @RequestParam("mushroomImage") MultipartFile mushroomImage) throws IOException {
+    public ResponseEntity<?> identifyMushroom(@RequestParam("mushroomImage") MultipartFile mushroomImage, HttpServletRequest request) throws IOException {
+        Long userId = (Long) request.getAttribute("userId");
         String imageName = imageService.saveImageToStorage(IMAGE_UPLOAD_DIRECTORY + "/" + userId, mushroomImage);
         User foundUser = userService.getUser(userId);
 

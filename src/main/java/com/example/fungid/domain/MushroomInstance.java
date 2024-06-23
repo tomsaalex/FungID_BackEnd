@@ -24,12 +24,6 @@ public class MushroomInstance {
     @Id
     @Column(nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SequenceGenerator(
-            name = "mushroom_instance_sequence",
-            sequenceName = "mushroom_instance_sequence",
-            allocationSize = 1,
-            initialValue = 1
-    )
     private Long id;
 
     @ManyToOne
