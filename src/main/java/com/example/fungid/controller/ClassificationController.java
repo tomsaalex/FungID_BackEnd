@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/classifications")
@@ -55,11 +56,15 @@ public class ClassificationController {
             value = "/image/{id}",
             produces = MediaType.IMAGE_JPEG_VALUE
     )
-    public @ResponseBody byte[] getMushroomClassificationImage(@PathVariable("id") Long mushroomInstanceId, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> getMushroomClassificationImage(@PathVariable("id") Long mushroomInstanceId, HttpServletRequest request) throws IOException {
         MushroomInstance foundMushroom = classificationService.getMushroomInstance(mushroomInstanceId);
         Long userId = (Long) request.getAttribute("userId");
 
+        if(foundMushroom == null || !Objects.equals(foundMushroom.getUser().getId(), userId)) {
+            return new ResponseEntity<>("Your account does not appear to have a mushroom classification job with the given ID.", HttpStatus.NOT_FOUND);
+        }
+
         byte[] desiredImage = imageService.getImage(IMAGE_UPLOAD_DIRECTORY + "/" + userId, foundMushroom.getMushroomImageName());
-        return desiredImage;
+        return new ResponseEntity<>(desiredImage, HttpStatus.OK);
     }
 }

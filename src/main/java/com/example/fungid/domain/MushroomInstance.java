@@ -59,4 +59,12 @@ public class MushroomInstance {
     public void setMushroomImageName(String mushroomImagePath) {
         this.mushroomImageName = mushroomImagePath;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
