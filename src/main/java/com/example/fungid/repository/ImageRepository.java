@@ -1,6 +1,7 @@
-package com.example.fungid.service;
+package com.example.fungid.repository;
 
-import org.springframework.stereotype.Service;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -9,8 +10,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
-@Service
-public class ImageService {
+@Repository
+public class ImageRepository {
+
     public String saveImageToStorage(String uploadDirectory, MultipartFile imageFile) throws IOException {
         String uniqueFileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
 
@@ -33,6 +35,15 @@ public class ImageService {
             return Files.readAllBytes(imagePath);
         } else {
             return new byte[0];
+        }
+    }
+
+    public FileSystemResource getImageAsResource(Path imagePath) {
+        if (Files.exists(imagePath)) {
+            return new FileSystemResource(imagePath);
+        }
+        else {
+            return null;
         }
     }
 
