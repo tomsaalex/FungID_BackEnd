@@ -30,7 +30,7 @@ public class MushroomInstance {
     @JoinColumn(referencedColumnName = "id")
     private User user;
 
-    @Column(nullable = true, unique = false, length = 50)
+    @Column(nullable = true, unique = false, length = 100)
     private String classificationResult;
 
     @Column(nullable = false, unique = true, length = 100)

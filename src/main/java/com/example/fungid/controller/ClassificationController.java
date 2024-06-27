@@ -4,7 +4,7 @@ import com.example.fungid.domain.MushroomInstance;
 import com.example.fungid.domain.User;
 import com.example.fungid.dto.MushroomClassificationDTO;
 import com.example.fungid.service.ClassificationService;
-import com.example.fungid.service.ImageService;
+import com.example.fungid.repository.ImageRepository;
 import com.example.fungid.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -28,28 +28,28 @@ public class ClassificationController {
     @Autowired
     private final UserService userService;
 
-    @Autowired
-    private final ImageService imageService;
-
-    private final String IMAGE_UPLOAD_DIRECTORY = "src/main/resources/static/images/mushroom_instances";
-
     private static final Logger LOG = LoggerFactory.getLogger(ClassificationController.class);
 
-    public ClassificationController(ClassificationService classificationService, UserService userService, ImageService imageService) {
+    public ClassificationController(ClassificationService classificationService, UserService userService) {
         this.classificationService = classificationService;
         this.userService = userService;
-        this.imageService = imageService;
     }
 
     @PostMapping("/identify")
-    public ResponseEntity<?> identifyMushroom(@RequestParam("mushroomImage") MultipartFile mushroomImage, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> identifyMushroom(@RequestParam("mushroomImage") MultipartFile mushroomImage, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
-        String imageName = imageService.saveImageToStorage(IMAGE_UPLOAD_DIRECTORY + "/" + userId, mushroomImage);
         User foundUser = userService.getUser(userId);
 
-        MushroomClassificationDTO mushroomClassificationDTO = classificationService.classifyMushroom(foundUser, imageName);
+        if(foundUser == null) {
+            return new ResponseEntity<>("No user found with given credentials", HttpStatus.NOT_FOUND);
+        }
 
-        return new ResponseEntity<>(mushroomClassificationDTO, HttpStatus.OK);
+        try {
+            MushroomClassificationDTO mushroomClassificationDTO = classificationService.classifyMushroom(foundUser, mushroomImage);
+            return new ResponseEntity<>(mushroomClassificationDTO, HttpStatus.OK);
+        } catch (IOException ex) {
+            return new ResponseEntity<>("Error handling mushroom image", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping(
@@ -64,7 +64,11 @@ public class ClassificationController {
             return new ResponseEntity<>("Your account does not appear to have a mushroom classification job with the given ID.", HttpStatus.NOT_FOUND);
         }
 
-        byte[] desiredImage = imageService.getImage(IMAGE_UPLOAD_DIRECTORY + "/" + userId, foundMushroom.getMushroomImageName());
-        return new ResponseEntity<>(desiredImage, HttpStatus.OK);
+        try {
+            byte[] desiredImage = classificationService.getImage(userId, foundMushroom.getMushroomImageName());
+            return new ResponseEntity<>(desiredImage, HttpStatus.OK);
+        } catch (IOException ex) {
+            return new ResponseEntity<>("Error retrieving mushroom image", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

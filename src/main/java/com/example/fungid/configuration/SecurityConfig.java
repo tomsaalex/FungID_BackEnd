@@ -4,6 +4,9 @@ import com.example.fungid.domain.User;
 import com.example.fungid.service.JwtService;
 import com.example.fungid.service.UserService;
 import com.example.fungid.utils.EndpointData;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -61,9 +64,23 @@ public class SecurityConfig {
             String token = null;
             String username = null;
 
-            if (authHeader != null && authHeader.startsWith("Bearer")) {
-                token = authHeader.substring(7);
-                username = jwtService.extractUsername(token);
+            try {
+                if (authHeader != null && authHeader.startsWith("Bearer")) {
+                    token = authHeader.substring(7);
+                    username = jwtService.extractUsername(token);
+                }
+            } catch (ExpiredJwtException ex) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Login credentials provided have already expired.");
+                return;
+            } catch (MalformedJwtException ex) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("The login token sent is malformed and cannot be used to verify your identity.");
+                return;
+            } catch (SignatureException ex) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.");
+                return;
             }
 
             User user = userService.getUserByUsername(username);
@@ -75,6 +92,7 @@ public class SecurityConfig {
                 filterChain.doFilter(request, response);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Request blocked due to attempting to access a secured endpoint with no credentials");
             }
         }
     }
