@@ -4,11 +4,8 @@ import com.example.fungid.domain.MushroomInstance;
 import com.example.fungid.domain.User;
 import com.example.fungid.dto.MushroomClassificationDTO;
 import com.example.fungid.service.ClassificationService;
-import com.example.fungid.repository.ImageRepository;
 import com.example.fungid.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -28,8 +26,6 @@ public class ClassificationController {
     @Autowired
     private final UserService userService;
 
-    private static final Logger LOG = LoggerFactory.getLogger(ClassificationController.class);
-
     public ClassificationController(ClassificationService classificationService, UserService userService) {
         this.classificationService = classificationService;
         this.userService = userService;
@@ -40,8 +36,8 @@ public class ClassificationController {
         Long userId = (Long) request.getAttribute("userId");
         User foundUser = userService.getUser(userId);
 
-        if(foundUser == null) {
-            return new ResponseEntity<>("No user found with given credentials", HttpStatus.NOT_FOUND);
+        if (foundUser == null) {
+            return new ResponseEntity<>("No user found with the given credentials", HttpStatus.NOT_FOUND);
         }
 
         try {
@@ -53,14 +49,29 @@ public class ClassificationController {
     }
 
     @GetMapping(
-            value = "/image/{id}",
+            value = "/mushroom-instances"
+    )
+    public ResponseEntity<?> getAllClassifiedMushroomsForUser(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        User foundUser = userService.getUser(userId);
+
+        if (foundUser == null) {
+            return new ResponseEntity<>("No user found with the given credentials", HttpStatus.NOT_FOUND);
+        }
+
+        List<MushroomClassificationDTO> mushroomClassificationDTOs = classificationService.getAllMushroomInstancesForUser(foundUser);
+        return new ResponseEntity<>(mushroomClassificationDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping(
+            value = "/images/{id}",
             produces = MediaType.IMAGE_JPEG_VALUE
     )
-    public ResponseEntity<?> getMushroomClassificationImage(@PathVariable("id") Long mushroomInstanceId, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> getMushroomClassificationImage(@PathVariable("id") Long mushroomInstanceId, HttpServletRequest request) {
         MushroomInstance foundMushroom = classificationService.getMushroomInstance(mushroomInstanceId);
         Long userId = (Long) request.getAttribute("userId");
 
-        if(foundMushroom == null || !Objects.equals(foundMushroom.getUser().getId(), userId)) {
+        if (foundMushroom == null || !Objects.equals(foundMushroom.getUser().getId(), userId)) {
             return new ResponseEntity<>("Your account does not appear to have a mushroom classification job with the given ID.", HttpStatus.NOT_FOUND);
         }
 

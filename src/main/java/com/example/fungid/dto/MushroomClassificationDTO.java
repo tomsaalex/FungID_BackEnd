@@ -3,21 +3,13 @@ package com.example.fungid.dto;
 import jakarta.validation.constraints.Size;
 
 public class MushroomClassificationDTO {
+
+    public Long mushroomInstanceId;
     @Size(max = 50)
-    private String classificationResult;
+    public String classificationResult;
 
-    public MushroomClassificationDTO(String classificationResult) {
-        this.classificationResult = classificationResult;
-    }
-
-    public MushroomClassificationDTO() {
-    }
-
-    public String getClassificationResult() {
-        return classificationResult;
-    }
-
-    public void setClassificationResult(String classificationResult) {
+    public MushroomClassificationDTO(Long mushroomInstanceId, String classificationResult) {
+        this.mushroomInstanceId = mushroomInstanceId;
         this.classificationResult = classificationResult;
     }
 }

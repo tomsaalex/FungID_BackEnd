@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 @Service
 public class ClassificationService {
@@ -28,7 +29,6 @@ public class ClassificationService {
     private final ImageRepository imageRepository;
 
     private final String IMAGE_UPLOAD_DIRECTORY = "src/main/resources/static/images/mushroom_instances";
-    private final String AI_MODEL_URL = "http://localhost:5000";
 
     public ClassificationService(ClassificationRepository classificationRepository, ImageRepository imageRepository) {
         this.classificationRepository = classificationRepository;
@@ -41,7 +41,6 @@ public class ClassificationService {
     }
 
     public MushroomClassificationDTO classifyMushroom(User user, MultipartFile mushroomImage) throws IOException {
-        //String classificationResult = "Amanita muscaria"; // TODO: Replace with call to AI model
         String userImageDirectory = IMAGE_UPLOAD_DIRECTORY + "/" + user.getId();
 
         String imageName = imageRepository.saveImageToStorage(userImageDirectory, mushroomImage);
@@ -60,6 +59,11 @@ public class ClassificationService {
         return imageRepository.getImage(IMAGE_UPLOAD_DIRECTORY + "/" + userId, mushroomImageName);
     }
 
+    public List<MushroomClassificationDTO> getAllMushroomInstancesForUser(User user) {
+        List<MushroomInstance> mushroomInstances = classificationRepository.findAllByUser(user);
+        return mushroomInstances.stream().map(this::mapToDTO).toList();
+    }
+
     public String classifyMushroomWithAIModel(Path mushroomImageFilePath) {
         FileSystemResource imageResource = imageRepository.getImageAsResource(mushroomImageFilePath);
 
@@ -69,6 +73,7 @@ public class ClassificationService {
         body.add("file", imageResource);
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+        String AI_MODEL_URL = "http://localhost:5000";
         String requestAddress = AI_MODEL_URL + "/api/classifications/identify";
 
         RestTemplate restTemplate = new RestTemplate();
@@ -84,6 +89,6 @@ public class ClassificationService {
     }
 
     public MushroomClassificationDTO mapToDTO(MushroomInstance mushroomInstance) {
-        return new MushroomClassificationDTO(mushroomInstance.getClassificationResult());
+        return new MushroomClassificationDTO(mushroomInstance.getId(), mushroomInstance.getClassificationResult());
     }
 }
