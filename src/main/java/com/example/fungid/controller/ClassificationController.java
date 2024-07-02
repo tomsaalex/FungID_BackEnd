@@ -7,6 +7,7 @@ import com.example.fungid.service.ClassificationService;
 import com.example.fungid.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,7 +34,7 @@ public class ClassificationController {
     }
 
     @PostMapping("/identify")
-    public ResponseEntity<?> identifyMushroom(@RequestParam("mushroomImage") MultipartFile mushroomImage, HttpServletRequest request) {
+    public ResponseEntity<?> identifyMushroom(@RequestPart("mushroomImage") MultipartFile mushroomImage, @RequestParam("mushroomDate") @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss-SSS")  LocalDateTime mushroomDate, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
         User foundUser = userService.getUser(userId);
 
@@ -41,7 +43,7 @@ public class ClassificationController {
         }
 
         try {
-            MushroomClassificationDTO mushroomClassificationDTO = classificationService.classifyMushroom(foundUser, mushroomImage);
+            MushroomClassificationDTO mushroomClassificationDTO = classificationService.classifyMushroom(foundUser, mushroomImage, mushroomDate);
             return new ResponseEntity<>(mushroomClassificationDTO, HttpStatus.OK);
         } catch (IOException ex) {
             return new ResponseEntity<>("Error handling mushroom image", HttpStatus.INTERNAL_SERVER_ERROR);
