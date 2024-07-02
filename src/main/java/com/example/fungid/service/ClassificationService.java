@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -40,7 +41,7 @@ public class ClassificationService {
         return builder.build();
     }
 
-    public MushroomClassificationDTO classifyMushroom(User user, MultipartFile mushroomImage) throws IOException {
+    public MushroomClassificationDTO classifyMushroom(User user, MultipartFile mushroomImage, LocalDateTime mushroomDate) throws IOException {
         String userImageDirectory = IMAGE_UPLOAD_DIRECTORY + "/" + user.getId();
 
         String imageName = imageRepository.saveImageToStorage(userImageDirectory, mushroomImage);
@@ -48,7 +49,7 @@ public class ClassificationService {
         Path mushroomImageFilePath = Path.of(userImageDirectory, imageName);
         String classificationResult = classifyMushroomWithAIModel(mushroomImageFilePath);
 
-        MushroomInstance classifiedMushroom = new MushroomInstance(user, classificationResult, imageName);
+        MushroomInstance classifiedMushroom = new MushroomInstance(user, classificationResult, imageName, mushroomDate);
 
         classifiedMushroom = classificationRepository.save(classifiedMushroom);
 
@@ -89,6 +90,6 @@ public class ClassificationService {
     }
 
     public MushroomClassificationDTO mapToDTO(MushroomInstance mushroomInstance) {
-        return new MushroomClassificationDTO(mushroomInstance.getId(), mushroomInstance.getClassificationResult());
+        return new MushroomClassificationDTO(mushroomInstance.getId(), mushroomInstance.getClassificationResult(), mushroomInstance.getSampleTakenAt());
     }
 }

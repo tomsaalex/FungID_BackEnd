@@ -2,6 +2,8 @@ package com.example.fungid.domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "mushroom_instances")
 public class MushroomInstance {
@@ -9,16 +11,11 @@ public class MushroomInstance {
     public MushroomInstance() {
     }
 
-    public MushroomInstance(Long id, String classificationResult, String mushroomImageName) {
-        this.id = id;
-        this.classificationResult = classificationResult;
-        this.mushroomImageName = mushroomImageName;
-    }
-
-    public MushroomInstance(User user, String classificationResult, String mushroomImageName) {
+    public MushroomInstance(User user, String classificationResult, String mushroomImageName, LocalDateTime sampleTakenAt) {
         this.user = user;
         this.classificationResult = classificationResult;
         this.mushroomImageName = mushroomImageName;
+        this.sampleTakenAt = sampleTakenAt;
     }
 
     @Id
@@ -30,34 +27,25 @@ public class MushroomInstance {
     @JoinColumn(referencedColumnName = "id")
     private User user;
 
-    @Column(nullable = true, unique = false, length = 100)
+    @Column(length = 100)
     private String classificationResult;
 
     @Column(nullable = false, unique = true, length = 100)
     private String mushroomImageName;
 
+    @Column(nullable = false)
+    private LocalDateTime sampleTakenAt;
+
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getClassificationResult() {
         return classificationResult;
     }
 
-    public void setClassificationResult(String classificationResult) {
-        this.classificationResult = classificationResult;
-    }
-
     public String getMushroomImageName() {
         return mushroomImageName;
-    }
-
-    public void setMushroomImageName(String mushroomImagePath) {
-        this.mushroomImageName = mushroomImagePath;
     }
 
     public User getUser() {
@@ -67,4 +55,9 @@ public class MushroomInstance {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public LocalDateTime getSampleTakenAt() {
+        return sampleTakenAt;
+    }
+
 }
