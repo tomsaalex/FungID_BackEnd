@@ -3,7 +3,6 @@ package com.example.fungid.service;
 import com.example.fungid.domain.User;
 import com.example.fungid.dto.UserDTO;
 import com.example.fungid.repository.UserRepository;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +19,11 @@ public class UserService {
 
     public boolean userExists(String username) {
         User user = userRepository.findByUsername(username);
+        return user != null;
+    }
+
+    public boolean emailInUse(String email) {
+        User user = userRepository.findByEmail(email);
         return user != null;
     }
 
