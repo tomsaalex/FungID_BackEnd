@@ -1,6 +1,4 @@
 package com.example.fungid.dto;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 
@@ -8,26 +6,17 @@ public class UserDTO {
 
     private Long id;
 
-    @NotNull
     @Size(max = 50)
     private String username;
 
-    @NotNull
     @Size(max = 50)
     private String password;
 
-    @NotNull
     @Size(max = 50)
     private String email;
 
 
     public UserDTO() {
-    }
-
-    public UserDTO(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
     }
 
     public Long getId() {

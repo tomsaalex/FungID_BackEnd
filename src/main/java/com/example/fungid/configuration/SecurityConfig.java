@@ -7,6 +7,7 @@ import com.example.fungid.utils.EndpointData;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -41,7 +42,6 @@ public class SecurityConfig {
         openEndpoints.add(new EndpointData("/api/users", HttpMethod.GET));
         openEndpoints.add(new EndpointData("/api/users/login", HttpMethod.POST));
         openEndpoints.add(new EndpointData("/api/users/register", HttpMethod.POST));
-        openEndpoints.add(new EndpointData("/api/classifications/identify", HttpMethod.POST));
     }
 
     @Bean
@@ -59,9 +59,9 @@ public class SecurityConfig {
 
     private class TokenValidationFilter extends OncePerRequestFilter {
         @Override
-        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        protected void doFilterInternal(HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull FilterChain filterChain) throws ServletException, IOException {
             String authHeader = request.getHeader("Authorization");
-            String token = null;
+            String token;
             String username = null;
 
             try {
@@ -92,7 +92,7 @@ public class SecurityConfig {
                 filterChain.doFilter(request, response);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Request blocked due to attempting to access a secured endpoint with no credentials");
+                response.getWriter().write("Request blocked due to attempting to access a secured endpoint with no credentials or invalid credentials.");
             }
         }
     }

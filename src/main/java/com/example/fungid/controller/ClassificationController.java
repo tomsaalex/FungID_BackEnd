@@ -7,17 +7,15 @@ import com.example.fungid.service.ClassificationService;
 import com.example.fungid.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/classifications")
@@ -34,20 +32,16 @@ public class ClassificationController {
     }
 
     @PostMapping("/identify")
-    public ResponseEntity<?> identifyMushroom(@RequestPart("mushroomImage") MultipartFile mushroomImage, @RequestParam("mushroomDate") @DateTimeFormat(pattern = "yyyy-MM-dd-HH-mm-ss-SSS")  LocalDateTime mushroomDate, HttpServletRequest request) {
+    public ResponseEntity<?> identifyMushroom(@RequestPart("mushroomImage") MultipartFile mushroomImage, @RequestParam("mushroomDate") String mushroomDateString, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss-SSS");
+        LocalDateTime mushroomDate = LocalDateTime.parse(mushroomDateString, formatter);
+
         User foundUser = userService.getUser(userId);
 
-        if (foundUser == null) {
-            return new ResponseEntity<>("No user found with the given credentials", HttpStatus.NOT_FOUND);
-        }
-
-        try {
-            MushroomClassificationDTO mushroomClassificationDTO = classificationService.classifyMushroom(foundUser, mushroomImage, mushroomDate);
-            return new ResponseEntity<>(mushroomClassificationDTO, HttpStatus.OK);
-        } catch (IOException ex) {
-            return new ResponseEntity<>("Error handling mushroom image", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        MushroomClassificationDTO mushroomClassificationDTO = classificationService.classifyMushroom(foundUser, mushroomImage, mushroomDate);
+        return new ResponseEntity<>(mushroomClassificationDTO, HttpStatus.OK);
     }
 
     @GetMapping(
@@ -57,31 +51,19 @@ public class ClassificationController {
         Long userId = (Long) request.getAttribute("userId");
         User foundUser = userService.getUser(userId);
 
-        if (foundUser == null) {
-            return new ResponseEntity<>("No user found with the given credentials", HttpStatus.NOT_FOUND);
-        }
-
         List<MushroomClassificationDTO> mushroomClassificationDTOs = classificationService.getAllMushroomInstancesForUser(foundUser);
         return new ResponseEntity<>(mushroomClassificationDTOs, HttpStatus.OK);
     }
 
     @GetMapping(
             value = "/images/{id}",
-            produces = MediaType.IMAGE_JPEG_VALUE
+            produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, MediaType.APPLICATION_JSON_VALUE}
     )
     public ResponseEntity<?> getMushroomClassificationImage(@PathVariable("id") Long mushroomInstanceId, HttpServletRequest request) {
-        MushroomInstance foundMushroom = classificationService.getMushroomInstance(mushroomInstanceId);
         Long userId = (Long) request.getAttribute("userId");
+        MushroomInstance foundMushroom = classificationService.getMushroomInstanceForUser(mushroomInstanceId, userId);
 
-        if (foundMushroom == null || !Objects.equals(foundMushroom.getUser().getId(), userId)) {
-            return new ResponseEntity<>("Your account does not appear to have a mushroom classification job with the given ID.", HttpStatus.NOT_FOUND);
-        }
-
-        try {
-            byte[] desiredImage = classificationService.getImage(userId, foundMushroom.getMushroomImageName());
-            return new ResponseEntity<>(desiredImage, HttpStatus.OK);
-        } catch (IOException ex) {
-            return new ResponseEntity<>("Error retrieving mushroom image", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        byte[] desiredImage = classificationService.getImage(userId, foundMushroom.getMushroomImageName());
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_JPEG).body(desiredImage);
     }
 }
