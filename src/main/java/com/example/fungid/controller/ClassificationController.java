@@ -57,7 +57,7 @@ public class ClassificationController {
 
     @GetMapping(
             value = "/images/{id}",
-            produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, MediaType.APPLICATION_JSON_VALUE}
+            produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.APPLICATION_JSON_VALUE}
     )
     public ResponseEntity<?> getMushroomClassificationImage(@PathVariable("id") Long mushroomInstanceId, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
