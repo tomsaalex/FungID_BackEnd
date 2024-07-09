@@ -1,6 +1,6 @@
 package com.example.fungid.controller;
 
-import com.example.fungid.dto.LoginDTO;
+import com.example.fungid.dto.AuthDTO;
 import com.example.fungid.dto.UserDTO;
 import com.example.fungid.service.JwtService;
 import com.example.fungid.service.UserService;
@@ -34,8 +34,8 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userToRegister) {
         UserDTO savedUser = userService.saveUser(userToRegister);
-
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        String token = jwtService.generateToken(savedUser.getUsername());
+        return new ResponseEntity<>(new AuthDTO(savedUser.getId(), token), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
@@ -43,6 +43,6 @@ public class UserController {
         UserDTO foundUser = userService.loadUserByCredentials(userToLoginDTO.getUsername(), userToLoginDTO.getPassword());
 
         String token = jwtService.generateToken(userToLoginDTO.getUsername());
-        return new ResponseEntity<>(new LoginDTO(foundUser.getId(), token), HttpStatus.OK);
+        return new ResponseEntity<>(new AuthDTO(foundUser.getId(), token), HttpStatus.OK);
     }
 }
