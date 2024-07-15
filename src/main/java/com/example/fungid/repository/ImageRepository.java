@@ -13,10 +13,16 @@ import java.util.UUID;
 @Repository
 public class ImageRepository {
 
-    public String saveImageToStorage(String uploadDirectory, MultipartFile imageFile) throws IOException {
+    private final Path basePath;
+
+    public ImageRepository(Path basePath) {
+        this.basePath = basePath;
+    }
+
+    public Path saveImageToStorage(String uploadDirectory, MultipartFile imageFile) throws IOException {
         String uniqueFileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
 
-        Path uploadPath = Path.of(uploadDirectory);
+        Path uploadPath = basePath.resolve(uploadDirectory);
         Path filePath = uploadPath.resolve(uniqueFileName);
 
         if (!Files.exists(uploadPath)) {
@@ -25,11 +31,11 @@ public class ImageRepository {
 
         Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        return uniqueFileName;
+        return filePath;
     }
 
     public byte[] getImage(String imageDirectory, String imageName) throws IOException {
-        Path imagePath = Path.of(imageDirectory, imageName);
+        Path imagePath = basePath.resolve(imageDirectory).resolve(imageName);
 
         if (Files.exists(imagePath)) {
             return Files.readAllBytes(imagePath);
@@ -44,17 +50,6 @@ public class ImageRepository {
         }
         else {
             return null;
-        }
-    }
-
-    public String deleteImage(String imageDirectory, String imageName) throws IOException {
-        Path imagePath = Path.of(imageDirectory, imageName);
-
-        if (Files.exists(imagePath)) {
-            Files.delete(imagePath);
-            return "Success";
-        } else {
-            return "Failed";
         }
     }
 }

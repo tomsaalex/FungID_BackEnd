@@ -108,8 +108,8 @@ public class GlobalControllerExceptionHandler {
     }
 
     @ExceptionHandler(value = {MissingServletRequestPartException.class})
-    protected ResponseEntity<String> handleMissingServletRequestPartException() {
-        String bodyOfResponse = "The multipart request is missing one or more parts.";
+    protected ResponseEntity<String> handleMissingServletRequestPartException(MissingServletRequestPartException ex) {
+        String bodyOfResponse = "The multipart request is missing one or more parts." + ex.getMessage();
         return new ResponseEntity<>(bodyOfResponse, HttpStatus.BAD_REQUEST);
     }
 

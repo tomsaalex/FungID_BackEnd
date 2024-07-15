@@ -3,14 +3,14 @@ package com.example.fungid.domain;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "mushroom_instances")
 public class MushroomInstance {
-
     public MushroomInstance() {
-    }
 
+    }
     public MushroomInstance(User user, String classificationResult, String mushroomImageName, LocalDateTime sampleTakenAt) {
         this.user = user;
         this.classificationResult = classificationResult;
@@ -40,6 +40,10 @@ public class MushroomInstance {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getClassificationResult() {
         return classificationResult;
     }
@@ -60,4 +64,21 @@ public class MushroomInstance {
         return sampleTakenAt;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MushroomInstance that = (MushroomInstance) o;
+        return Objects.equals(user, that.user) && Objects.equals(classificationResult, that.classificationResult) && Objects.equals(mushroomImageName, that.mushroomImageName) && Objects.equals(sampleTakenAt, that.sampleTakenAt);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(user);
+        result = 31 * result + Objects.hashCode(classificationResult);
+        result = 31 * result + Objects.hashCode(mushroomImageName);
+        result = 31 * result + Objects.hashCode(sampleTakenAt);
+        return result;
+    }
 }
