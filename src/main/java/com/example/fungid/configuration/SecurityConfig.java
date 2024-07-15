@@ -83,7 +83,12 @@ public class SecurityConfig {
                 return;
             }
 
-            User user = userService.getUserByUsername(username);
+            User user;
+            try {
+                user = userService.getUserByUsername(username);
+            } catch (Exception ex) {
+                user = null;
+            }
 
             if (user != null) {
                 request.setAttribute("userId", user.getId());

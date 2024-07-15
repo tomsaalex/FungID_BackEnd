@@ -1,6 +1,5 @@
 package com.example.fungid.service;
 
-import com.example.fungid.domain.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -22,7 +21,8 @@ public class JwtService {
     private String secretKeyText;
     private SecretKey secretKey;
 
-    private static final long expirationTime = 1000 * 60 * 60 * 24 * 10;
+    private static final long expirationTime = 1000 * 60 * 60 * 24 * 2;
+    //private static final long expirationTime = 1000 * 20;
 
     @PostConstruct
     void convertKey() {
@@ -52,9 +52,9 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public Date extractExpiration(String token) {
+    /*public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
-    }
+    }*/
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
@@ -69,16 +69,18 @@ public class JwtService {
                 .getPayload();
     }
 
+    /*
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
+
 
     public Boolean validateToken(String token, User user) {
         final String username = extractUsername(token);
         return (username.equals(user.getUsername()) && !isTokenExpired(token));
     }
 
-    /*public User tokenIsValid(String token) {
+    public User tokenIsValid(String token) {
         try {
             Jws<Claims> claimsJws = Jwts.parser()
                     .verifyWith(secretKey)
