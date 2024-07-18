@@ -153,7 +153,7 @@ class ClassificationServiceUnitTest {
 
     @Test
     @Tag("Unit_Testing")
-    void getAllMushroomInstancesForUser() {
+    void test_getAllMushroomInstancesForUser() {
         // Arrange
         List<MushroomInstance> expectedMushroomInstances = List.of(
                 new MushroomInstance(user, "classification1", "image1.jpg", LocalDateTime.now()),

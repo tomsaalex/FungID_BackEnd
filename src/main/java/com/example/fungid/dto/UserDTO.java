@@ -1,6 +1,8 @@
 package com.example.fungid.dto;
 import jakarta.validation.constraints.Size;
 
+import java.util.Objects;
+
 
 public class UserDTO {
 
@@ -59,4 +61,21 @@ public class UserDTO {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserDTO userDTO = (UserDTO) o;
+        return Objects.equals(id, userDTO.id) && Objects.equals(username, userDTO.username) && Objects.equals(password, userDTO.password) && Objects.equals(email, userDTO.email);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(id);
+        result = 31 * result + Objects.hashCode(username);
+        result = 31 * result + Objects.hashCode(password);
+        result = 31 * result + Objects.hashCode(email);
+        return result;
+    }
 }

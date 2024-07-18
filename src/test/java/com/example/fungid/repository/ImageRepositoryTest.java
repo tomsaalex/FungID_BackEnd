@@ -1,6 +1,6 @@
 package com.example.fungid.repository;
 
-import com.example.fungid.config.TestFileSystemConfig;
+import com.example.fungid.test_config.TestFileSystemConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.io.IOException;
@@ -21,13 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration(classes = {TestFileSystemConfig.class})
 @Import({TestFileSystemConfig.class, ImageRepository.class})
 @DataJpaTest
-//@ActiveProfiles("test")
+@ActiveProfiles("test")
 class ImageRepositoryTest {
     @Autowired
     private ImageRepository imageRepository;
 
     private final Path basePath;
-    private byte[] savedImageBytes = "test_image".getBytes();
+    private final byte[] savedImageBytes = "test_image".getBytes();
 
     @Autowired
     ImageRepositoryTest(Path basePath) {

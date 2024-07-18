@@ -1,6 +1,7 @@
 package com.example.fungid.repository;
 
 import com.example.fungid.domain.User;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,11 @@ class UserRepositoryTest {
         user1.setPassword("password1");
 
         entityManager.persist(user1);
+    }
+
+    @AfterEach
+    void tearDown() {
+        entityManager.clear();
     }
 
     @Test
