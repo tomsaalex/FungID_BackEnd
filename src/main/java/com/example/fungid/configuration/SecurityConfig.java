@@ -57,9 +57,9 @@ public class SecurityConfig {
         return http.build();
     }
 
-    private class TokenValidationFilter extends OncePerRequestFilter {
+    public class TokenValidationFilter extends OncePerRequestFilter {
         @Override
-        protected void doFilterInternal(HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull FilterChain filterChain) throws ServletException, IOException {
+        public void doFilterInternal(HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull FilterChain filterChain) throws ServletException, IOException {
             String authHeader = request.getHeader("Authorization");
             String token;
             String username = null;
@@ -71,15 +71,24 @@ public class SecurityConfig {
                 }
             } catch (ExpiredJwtException ex) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
                 response.getWriter().write("Login credentials provided have already expired.");
+                response.getWriter().flush();
+                response.getWriter().close();
                 return;
             } catch (MalformedJwtException ex) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setContentType("application/json");
                 response.getWriter().write("The login token sent is malformed and cannot be used to verify your identity.");
+                response.getWriter().flush();
+                response.getWriter().close();
                 return;
             } catch (SignatureException ex) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setContentType("application/json");
                 response.getWriter().write("JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.");
+                response.getWriter().flush();
+                response.getWriter().close();
                 return;
             }
 
@@ -97,7 +106,10 @@ public class SecurityConfig {
                 filterChain.doFilter(request, response);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
                 response.getWriter().write("Request blocked due to attempting to access a secured endpoint with no credentials or invalid credentials.");
+                response.getWriter().flush();
+                response.getWriter().close();
             }
         }
     }

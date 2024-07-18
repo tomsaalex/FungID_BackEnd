@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.format.DateTimeParseException;
 
@@ -131,6 +132,12 @@ public class GlobalControllerExceptionHandler {
         String message = String.format("Invalid parameter value: '%s' for parameter: '%s'. Expected type: %s.",
                 ex.getValue(), ex.getName(), ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName(): "unknown");
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<String> handleNoResourceFoundException() {
+        String message = "The requested resource was not found.";
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {Exception.class})
