@@ -30,7 +30,7 @@ public class NetworkService {
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
         String AI_MODEL_URL = "http://localhost:5000";
-        String requestAddress = AI_MODEL_URL + "/api/classifications/identify";
+        String requestAddress = AI_MODEL_URL + "/classifications/identify";
 
         ResponseEntity<ClassificationResultAI> response = restTemplate.postForEntity(requestAddress, requestEntity, ClassificationResultAI.class);
         ClassificationResultAI mushroomClassificationResult = response.getBody();
