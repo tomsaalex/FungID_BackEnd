@@ -8,6 +8,7 @@ import com.example.fungid.test_config.TestRestTemplateConfig;
 import jakarta.annotation.PostConstruct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -54,6 +55,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_registerUser_registerSuccessful() {
         // Arrange
 
@@ -73,6 +75,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_registerUser_invalidUsername() {
         // Arrange
 
@@ -108,6 +111,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_registerUser_invalidPassword() {
         // Arrange
 
@@ -143,6 +147,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_registerUser_invalidEmail() {
         // Arrange
 
@@ -178,6 +183,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_registerUser_usernameLengthExceeded() {
         // Arrange
 
@@ -195,6 +201,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_registerUser_passwordLengthExceeded() {
         // Arrange
 
@@ -212,6 +219,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_registerUser_emailLengthExceeded() {
         // Arrange
 
@@ -229,6 +237,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     @Sql({"/user-controller-test.sql"})
     void test_registerUser_usernameTaken() {
         // Arrange
@@ -247,6 +256,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     @Sql({"/user-controller-test.sql"})
     void test_registerUser_emailTaken() {
         // Arrange
@@ -265,6 +275,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     @Sql({"/user-controller-test.sql"})
     void test_loginUser_loginSuccessful() {
         // Arrange
@@ -283,6 +294,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_loginUser_invalidUsername() {
         // Arrange
 
@@ -315,6 +327,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_loginUser_invalidPassword() {
         // Arrange
 
@@ -347,6 +360,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     @Sql({"/user-controller-test.sql"})
     void test_loginUser_invalidCredentials() {
         // Arrange
@@ -371,6 +385,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void loginUser() {
     }
 }

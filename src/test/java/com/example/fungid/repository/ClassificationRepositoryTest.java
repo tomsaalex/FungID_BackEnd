@@ -4,6 +4,7 @@ import com.example.fungid.domain.MushroomInstance;
 import com.example.fungid.domain.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -61,6 +62,7 @@ class ClassificationRepositoryTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_findAllByUser_mushroomInstancesFound() {
         // Act
         List<MushroomInstance> mushroomInstances = classificationRepository.findAllByUser(user1);
@@ -74,6 +76,7 @@ class ClassificationRepositoryTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_findAllByUser_noMushroomInstances() {
         // Act
         List<MushroomInstance> mushroomInstances = classificationRepository.findAllByUser(user2);

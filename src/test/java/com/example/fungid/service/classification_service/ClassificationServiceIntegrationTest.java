@@ -13,6 +13,7 @@ import com.example.fungid.test_config.TestFileSystemConfig;
 import com.example.fungid.test_config.TestRestTemplateConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -89,6 +90,7 @@ class ClassificationServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_classifyMushroom_classificationSucceeded() {
         // Arrange
         MockMultipartFile imageFile = new MockMultipartFile("mushroomImage", "mushroom.jpg", "image/jpeg", "mushroom".getBytes());
@@ -110,6 +112,7 @@ class ClassificationServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_classifyMushroom_connectionRefused() {
         // Arrange
         MockMultipartFile imageFile = new MockMultipartFile("mushroomImage", "mushroom.jpg", "image/jpeg", "mushroom".getBytes());
@@ -123,6 +126,7 @@ class ClassificationServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_getImage_imageFound() throws IOException {
         // Arrange
         MockMultipartFile imageFile = new MockMultipartFile("mushroomImage", "mushroom.jpg", "image/jpeg", "mushroom".getBytes());
@@ -139,6 +143,7 @@ class ClassificationServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void getAllMushroomInstancesForUser() {
         // Act
         List<MushroomClassificationDTO> mushroomInstances = classificationService.getAllMushroomInstancesForUser(existingUser);
@@ -153,6 +158,7 @@ class ClassificationServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void getMushroomInstanceForUser() {
         // Arrange
         MushroomInstance expectedMushroomInstance = existingMushroomInstances.get(0);

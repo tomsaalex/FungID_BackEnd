@@ -10,6 +10,7 @@ import com.example.fungid.service.ClassificationService;
 import com.example.fungid.service.JwtService;
 import com.example.fungid.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,7 @@ class ClassificationControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_identifyMushroom_classificationSuccessful() throws Exception {
         //Arrange
 
@@ -88,6 +90,7 @@ class ClassificationControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_identifyMushroom_invalidDate() throws Exception {
         //Arrange
 
@@ -109,6 +112,7 @@ class ClassificationControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_identifyMushroom_emptyImage() throws Exception {
         // Arrange
 
@@ -132,6 +136,7 @@ class ClassificationControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_identifyMushroom_unsupportedContentType() throws Exception {
         // Arrange
 
@@ -165,6 +170,7 @@ class ClassificationControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_identifyMushroom_classificationError() throws Exception {
         // Arrange
 
@@ -189,6 +195,7 @@ class ClassificationControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_getAllClassifiedMushroomsForUser() throws Exception {
         // Arrange
 
@@ -216,6 +223,7 @@ class ClassificationControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_getMushroomClassificationImage_imageFound() throws Exception {
         // Arrange
 
@@ -237,6 +245,7 @@ class ClassificationControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_getMushroomClassificationImage_mushroomNotFound() throws Exception {
         // Arrange
         Mockito.when(jwtService.extractUsername(Mockito.any())).thenReturn(expectedUser.getUsername());
@@ -254,6 +263,7 @@ class ClassificationControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_getMushroomClassificationImage_mushroomImageRetrievalError() throws Exception {
         // Arrange
         Mockito.when(jwtService.extractUsername(Mockito.any())).thenReturn(expectedUser.getUsername());

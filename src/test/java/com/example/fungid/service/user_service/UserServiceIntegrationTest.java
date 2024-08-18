@@ -9,6 +9,7 @@ import com.example.fungid.repository.UserRepository;
 import com.example.fungid.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -52,6 +53,7 @@ class UserServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_saveUser_saveSuccessful() {
         // Arrange
         UserDTO userDTO = new UserDTO();
@@ -71,6 +73,7 @@ class UserServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_saveUser_usernameTaken() {
         // Arrange
         UserDTO userDTO = new UserDTO();
@@ -84,6 +87,7 @@ class UserServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_saveUser_emailTaken() {
         // Arrange
         UserDTO userDTO = new UserDTO();
@@ -97,6 +101,7 @@ class UserServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_loadUserByCredentials_loadedSuccessfully() {
         // Arrange
         UserDTO userDTO = new UserDTO();
@@ -114,6 +119,7 @@ class UserServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_loadUserByCredentials_invalidCredentials() {
         // Arrange
         String invalidUsername = "invalid_username";
@@ -126,6 +132,7 @@ class UserServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_getUser_userFound() {
         // Arrange
         Long existingUserId = existingUser.getId();
@@ -141,6 +148,7 @@ class UserServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_getUser_userNotFound() {
         // Arrange
         Long invalidUserId = 100L;
@@ -150,6 +158,7 @@ class UserServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_getUserByUsername_userFound() {
         // Arrange
         String existingUsername = existingUser.getUsername();
@@ -165,6 +174,7 @@ class UserServiceIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_getUserByUsername_userNotFound() {
         // Arrange
         String invalidUsername = "invalid_username";

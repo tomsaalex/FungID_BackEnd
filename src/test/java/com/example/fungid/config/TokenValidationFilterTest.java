@@ -8,6 +8,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -42,6 +43,7 @@ public class TokenValidationFilterTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     public void test_doFilterInternal_missingToken() throws ServletException, IOException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setRequestURI(testUri);
@@ -55,6 +57,7 @@ public class TokenValidationFilterTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     public void test_doFilterInternal_expiredToken() throws ServletException, IOException {
         // Arrange
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -74,6 +77,7 @@ public class TokenValidationFilterTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     public void test_doFilterInternal_malformedToken() throws ServletException, IOException {
         // Arrange
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -93,6 +97,7 @@ public class TokenValidationFilterTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     public void test_doFilterInternal_signatureException() throws ServletException, IOException {
         // Arrange
         MockHttpServletRequest request = new MockHttpServletRequest();

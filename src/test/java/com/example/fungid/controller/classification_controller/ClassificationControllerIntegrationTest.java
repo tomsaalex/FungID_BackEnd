@@ -9,6 +9,7 @@ import com.example.fungid.test_config.TestRestTemplateConfig;
 import jakarta.annotation.PostConstruct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,7 @@ class ClassificationControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     @Sql({"/classification-controller-test.sql"})
     void test_identifyMushroom_classificationSuccessful() {
         // Arrange
@@ -101,6 +103,7 @@ class ClassificationControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     @Sql({"/classification-controller-test.sql"})
     void test_identifyMushroom_invalidDate() {
         // Arrange
@@ -119,6 +122,7 @@ class ClassificationControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     @Sql({"/classification-controller-test.sql"})
     void test_identifyMushroom_emptyImage() {
         // Arrange
@@ -136,6 +140,7 @@ class ClassificationControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     @Sql({"/classification-controller-test.sql"})
     void test_identifyMushroom_unsupportedContentType() {
         // Arrange
@@ -160,6 +165,7 @@ class ClassificationControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     @Sql({"/classification-controller-test.sql"})
     void test_getAllClassifiedMushroomsForUser() {
         // Arrange
@@ -192,6 +198,7 @@ class ClassificationControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     @Sql({"/classification-controller-test.sql"})
     void test_getAllClassifiedMushroomsForUser_noMushroomsFound() {
         // Arrange
@@ -211,6 +218,7 @@ class ClassificationControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     @Sql({"/classification-controller-test.sql"})
     void test_getMushroomClassificationImage_imageFound() {
         // Arrange
@@ -243,6 +251,7 @@ class ClassificationControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     @Sql({"/classification-controller-test.sql"})
     void test_getMushroomClassificationImage_imageNotFound() {
         // Arrange
@@ -282,6 +291,7 @@ class ClassificationControllerIntegrationTest {
     }
 
     @Test
+    @Tag("Integration_Testing")
     void test_accessNonexistentEndpoint() {
         // TODO: Implement this test
     }

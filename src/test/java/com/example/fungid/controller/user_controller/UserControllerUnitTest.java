@@ -8,6 +8,7 @@ import com.example.fungid.exceptions.register.*;
 import com.example.fungid.service.JwtService;
 import com.example.fungid.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ class UserControllerUnitTest {
     private JwtService jwtService;
 
     @Test
+    @Tag("Unit_Testing")
     void test_registerUser_registerSuccessful() throws Exception {
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername("valid_username");
@@ -70,6 +72,7 @@ class UserControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_registerUser_invalidUsername() throws Exception {
         // Arrange
         UserDTO emptyUsernameUserDTO = new UserDTO();
@@ -138,6 +141,7 @@ class UserControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_registerUser_invalidPassword() throws Exception {
         // Arrange
         UserDTO emptyPasswordUserDTO = new UserDTO();
@@ -206,6 +210,7 @@ class UserControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_registerUser_invalidEmail() throws Exception {
         // Arrange
         UserDTO emptyEmailUserDTO = new UserDTO();
@@ -274,6 +279,7 @@ class UserControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_registerUser_usernameLengthExceeded() throws Exception {
         // Arrange
         UserDTO longUsernameUserDTO = new UserDTO();
@@ -301,6 +307,7 @@ class UserControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_registerUser_passwordLengthExceeded() throws Exception {
         // Arrange
         UserDTO longPasswordUserDTO = new UserDTO();
@@ -328,6 +335,7 @@ class UserControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_registerUser_emailLengthExceeded() throws Exception {
         // Arrange
         UserDTO longEmailUserDTO = new UserDTO();
@@ -356,6 +364,7 @@ class UserControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_registerUser_usernameTaken() throws Exception {
         // Arrange
         UserDTO takenUsernameUserDTO = new UserDTO();
@@ -382,6 +391,7 @@ class UserControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_registerUser_emailTaken() throws Exception {
         // Arrange
         UserDTO takenEmailUserDTO = new UserDTO();
@@ -408,6 +418,7 @@ class UserControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_loginUser_loginSuccessful() throws Exception {
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername("valid_username");
@@ -441,6 +452,7 @@ class UserControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_loginUser_invalidUsername() throws Exception {
         // Arrange
         UserDTO emptyUsernameUserDTO = new UserDTO();
@@ -505,6 +517,7 @@ class UserControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_loginUser_invalidPassword() throws Exception {
         // Arrange
         UserDTO emptyPasswordUserDTO = new UserDTO();
@@ -569,6 +582,7 @@ class UserControllerUnitTest {
     }
 
     @Test
+    @Tag("Unit_Testing")
     void test_loginUser_invalidCredentials() throws Exception {
         // Arrange
         UserDTO invalidCredentialsUserDTO = new UserDTO();
